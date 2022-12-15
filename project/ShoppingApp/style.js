@@ -1,47 +1,45 @@
-import { StyleSheet } from 'react-native'
+// import { StyleSheet, Dimensions } from 'react-native'
+// const{height:SCREEN_HEIGHT} = Dimensions.get('window');
 
-export default StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#fff',
-        alignItems: 'center',
-        justifyContent:'center',
-    },
-    dots:{
-        width: 10,
-        height: 10,
-        backgroundColor: 'grey',
-        borderRadius: 50,
-        marginHorizontal: 5,
-    },
-    dotsContainer:{
-        position:'absolute',
-        bottom:50,
-        flexDirection:'row',
-        width:'100%',
-        alignItems:'center',
-        justifyContent: 'center'
-    },
-    dotActive:{
-        backgroundColor:'#000'
-    },
-    image:{
-        width: '100%',
-        flex:0.6,
-    },
-    content:{
-        flex:0.4,
-        alignItems: 'center',
-    },
-    title:{
-        fontSize: 24,
-        fontWeight:'bold'
-    },
-    description:{
-        fontSize: 20,
-    },
-    price:{
-        fontSize: 32,
-        fontWeight:'bold'
-    }
-});
+// export default StyleSheet.create({
+//     container:{
+//         flex: 2,
+//         bottom:50,
+//         flexDirection:'column',
+//         width:'100%',
+//         alignItems:'center',
+//         justifyContent: 'space-evenly'
+//     },
+    
+//     content:{
+//         flex:0.4,
+//         alignItems: 'center',
+//     },
+//     title:{
+//         fontSize: 24,
+//         fontWeight:'bold'
+//     },
+//     description:{
+//         fontSize: 20,
+//     },
+//     price:{
+//         fontSize: 32,
+//         fontWeight:'bold'
+//     },
+//     bottomSheet:{
+//         height:SCREEN_HEIGHT,
+//         width:'100%',
+//         backgroundColor: 'grey',
+//         position:'absolute',
+//         top:SCREEN_HEIGHT,
+//         borderRadius:25
+//     },
+//     line:{
+//         width:75,
+//         height:4,
+//         backgroundColor:'white',
+//         alignSelf:'center',
+//         marginVertical: 15,
+//         borderRadius:2
+//     },
+// });

@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
-import {FlatList, View, Image, Text, Dimensions} from 'react-native';
-import styles from '../style.js'
-import carousel_data from '../assets/carousel_data';
+import {FlatList, View, Image, Text, Dimensions, StyleSheet} from 'react-native';
+import { getProducts } from '../assets/shopping_data';
 
 const {width, height} = Dimensions.get('screen');
-
+const carousel_data = getProducts();
 const SlideItem = ({data}) => {
     return(
         <View style={{width:width, height:height, alignItems:'center'}}>
@@ -40,7 +39,7 @@ const PaginationItem = ({data, idx}) => {
         itemVisiblePercentThreshold: 50, //how many percentage the slide should be on the frame to be considererd visible
     }).current;
   return(
-    <View>
+    <View >
         <FlatList
         data={carousel_data}
         style={{ flex: 2 }}
@@ -51,9 +50,52 @@ const PaginationItem = ({data, idx}) => {
         snapToAlignment="center"
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig = {viewabilityConfig}
+        keyExtractor={(item) => item.id.toString()}
         />
         <PaginationItem data={carousel_data} idx={index}/>
     </View>
   );
 };
 export default Carousel;
+
+
+const styles = StyleSheet.create({
+    dots:{
+        width: 10,
+        height: 10,
+        backgroundColor: 'grey',
+        borderRadius: 50,
+        marginHorizontal: 5,
+    },
+    dotsContainer:{
+        position:'absolute',
+        bottom:50,
+        flexDirection:'row',
+        width:'100%',
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    dotActive:{
+        backgroundColor:'#000'
+    },
+    image:{
+        width: '100%',
+        flex:0.6,
+    },
+     
+    content:{
+    flex:0.4,
+    alignItems: 'center',
+    },
+    title:{
+        fontSize: 24,
+        fontWeight:'bold'
+    },
+    description:{
+        fontSize: 20,
+    },
+    price:{
+        fontSize: 32,
+        fontWeight:'bold'
+    },
+});
