@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Carousel from './components/Carousel.js'
@@ -7,24 +7,20 @@ import PRODUCTS from './assets/shopping_data';
 import InfiniteCarousel from './components/InfiniteCarousel.js';
 
 export default function App(){
-    const [productsInCart, addProduct] = useState([]);
-    
+    const [productsInCart, updateCart] = useState([]);
     const addToCart = (item) => {
-        addProduct([
+        updateCart([
             ...productsInCart,
             {item}
         ]);
-        //console.log(productsInCart)
     };
-    //need carousel to go around infinity
-    //need to be able to remove items from shoppingcart
 
     return (
         <GestureHandlerRootView style={{flex:1}}>
             <View style={styles.container}>
                 <InfiniteCarousel  products={PRODUCTS} onPress = {addToCart} numberItems={1}/>
                 {/* <Carousel products={PRODUCTS} onPress = {addToCart} numberItems={3}/> */}
-                <ShoppingCart products={productsInCart} />
+                <ShoppingCart products={productsInCart} cartState = {updateCart}/>
             </View>
             
         </GestureHandlerRootView>

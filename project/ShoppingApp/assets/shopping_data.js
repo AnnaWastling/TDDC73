@@ -5,7 +5,7 @@ const PRODUCTS = [
         img: require('./img1.jpg'),
         description: "cheap",
         price: 20,
-        quantity: 0
+        quantity: 1
     },
     {
         id: 2,
@@ -13,7 +13,7 @@ const PRODUCTS = [
         img:  require('./img2.jpg'),
         description: "fancy",
         price: 200,
-        quantity: 0
+        quantity: 1
     },    
     {
         id: 3,
@@ -21,7 +21,7 @@ const PRODUCTS = [
         img: require('./img3.jpg'),
         description: "more fancy",
         price: 1500,
-        quantity: 0
+        quantity: 1
     },
     
 ];

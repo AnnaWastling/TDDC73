@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import {View, Image, Text, StyleSheet} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 const Card = ({data, onPress}) => {
     return(
@@ -49,7 +48,7 @@ const InfiniteCarousel = ({products, onPress, numberItems }) => {
                 index * nrItems,
                 index * nrItems + nrItems,
               )
-              .map((card, index) => (
+              .map((card) => (
                 <Card
                   key={index}
                   data={card}
