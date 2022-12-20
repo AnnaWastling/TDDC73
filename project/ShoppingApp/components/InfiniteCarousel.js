@@ -4,7 +4,7 @@ import {CartContext} from './CartContext';
 import arrowL from '../assets/arrowleft.png';
 import arrowR from '../assets/arrowright.png';
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
-const Card = ({data}) => {
+const Card = ({data, cardWidth}) => {
   const {addItemToCart} = useContext(CartContext);
 
   function onAddToCart() {
@@ -12,7 +12,7 @@ const Card = ({data}) => {
   }
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, {width:cardWidth}]}>
       <Image source={data.img} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
@@ -26,7 +26,7 @@ const Card = ({data}) => {
   );
 };
 
-const InfiniteCarousel = ({products, numberItems}) => {
+const InfiniteCarousel = ({products, numberItems, cardWidth}) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   let dots = [];
@@ -60,7 +60,7 @@ const InfiniteCarousel = ({products, numberItems}) => {
         <View style={styles.cardsContainer}>
           {products.slice(pageIndex * numberItems, pageIndex * numberItems + numberItems).map((card, index) => ( 
             //returns a part of the array, slice(start, end)
-          <Card key={index} data={card} />
+          <Card key={index} data={card} cardWidth={cardWidth}/>
           ))}
       </View>
         <View>
@@ -93,9 +93,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#f0f0f0',
     overflow: 'hidden',
-    height: SCREEN_HEIGHT - 300,
-    width: 95,
-    borderRadius: 50,
+    height: SCREEN_HEIGHT - 400,
+    //width: 95,
+    borderRadius: 25,
     margin:5,
     marginBottom:100
   },
@@ -130,14 +130,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 20,
+    fontSize: 14,
   },
   price: {
-    fontSize: 32,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   arrows:{
@@ -154,10 +154,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
   },
   buttontext: {
-    fontSize: 16,
-    lineHeight: 21,
+    fontSize: 14,
+    lineHeight: 14,
     fontWeight: 'bold',
-    letterSpacing: 0.25,
     color: 'white',
   },
 });

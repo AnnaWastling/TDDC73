@@ -6,7 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { CartContext } from './CartContext';
 const{height:SCREEN_HEIGHT} = Dimensions.get('window');
 
-const ShoppingCart = () =>{
+const ShoppingCart = ({backgroundColor, borderRadius}) =>{
   const {items, getItemsCount, getTotalPrice, removeFromCart, addQuantity, subtractQuantity} = useContext(CartContext);
 
   function Totals() {
@@ -83,7 +83,7 @@ const ShoppingCart = () =>{
 
   return(
     <GestureDetector gesture={gesture}>
-      <Animated.View style={[styles.bottomSheet, rBottomStyle]}>
+      <Animated.View style={[styles.bottomSheet, rBottomStyle, {backgroundColor:backgroundColor}, {borderRadius:borderRadius}]}>
         <View style={styles.line}/>
         <View style={[styles.row, {alignItems:'center'}, {justifyContent: "center"}]}>
           <Image source={shoppingcartIcon}/>
@@ -104,10 +104,9 @@ const styles = StyleSheet.create({
   bottomSheet:{
       height:SCREEN_HEIGHT,
       width:'100%',
-      backgroundColor: '#f0f0f0',
+      //backgroundColor: '#f0f0f0',
       position:'absolute',
       top:SCREEN_HEIGHT,
-      borderRadius:25,
   },
   line:{
       width:75,
@@ -118,11 +117,11 @@ const styles = StyleSheet.create({
       borderRadius:2
   },
   item: {
-    backgroundColor: '#fcfcfc',
     padding: 50,
     marginVertical: 8,
     marginHorizontal: 15,
-    borderRadius:25
+    borderRadius:25,
+    backgroundColor:'#fcfcfc'
   },
   row:{
     flexDirection:'row',
