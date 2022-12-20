@@ -1,39 +1,30 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Carousel from './components/Carousel.js'
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import ShoppingCart from './components/ShoppingCart.js';
 import PRODUCTS from './assets/shopping_data';
 import InfiniteCarousel from './components/InfiniteCarousel.js';
+import {CartProvider} from './components/CartContext.js';
 
-export default function App(){
-    const [productsInCart, updateCart] = useState([]);
-    const addToCart = (item) => {
-        updateCart([
-            ...productsInCart,
-            {item}
-        ]);
-    };
+export default function App() {
+  return (
+    <CartProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <View style={styles.container}>
+          <InfiniteCarousel products={PRODUCTS} numberItems={3} />
+          <ShoppingCart />
+        </View>
+      </GestureHandlerRootView>
+    </CartProvider>
+  );
+}
 
-    return (
-        <GestureHandlerRootView style={{flex:1}}>
-            <View style={styles.container}>
-                <InfiniteCarousel  products={PRODUCTS} onPress = {addToCart} numberItems={1}/>
-                {/* <Carousel products={PRODUCTS} onPress = {addToCart} numberItems={3}/> */}
-                <ShoppingCart products={productsInCart} cartState = {updateCart}/>
-            </View>
-            
-        </GestureHandlerRootView>
-    );
-  };
-
-  const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        bottom:50,
-        flexDirection:'column',
-        width:'100%',
-        alignItems:'center',
-        justifyContent: 'space-evenly'
-    },
+const styles = StyleSheet.create({
+  container: {
+    flex: 2,
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
 });

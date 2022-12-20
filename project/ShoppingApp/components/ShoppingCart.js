@@ -1,55 +1,52 @@
-import React, {useEffect, useState} from 'react';
-import {View, Dimensions, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState, useContext} from 'react';
+import {View, Dimensions, Image, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import shoppingcartIcon from '../assets/cart_icon.png';
 import { Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-
+import { CartContext } from './CartContext';
 const{height:SCREEN_HEIGHT} = Dimensions.get('window');
 
-const RenderItem = ({ data, removeFromCart }) => {
-  [currentQuantity, setQuantity] = useState(data.item.quantity)
+const ShoppingCart = () =>{
+  const {items, getItemsCount, getTotalPrice, removeFromCart, addQuantity, subtractQuantity} = useContext(CartContext);
 
-  const add = () =>{
-    if(data.item.quantity > 0){
-      setQuantity(data.item.quantity++);
-    }
-  }
-  const subtract = () =>{
-    if(data.item.quantity > 0){
-      setQuantity(data.item.quantity--);
-    }
-  }
-  return(
-    <View style={styles.item}>
-      <Text style={styles.title}>{data.item.title}</Text>
-      <TouchableOpacity onPress={removeFromCart ? () => removeFromCart(data.item) : () => console.log(error)}>
-          <Text>Remove</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={add}>
-        <Text> + </Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={subtract}>
-        <Text> - </Text>
-      </TouchableOpacity>
-      <Text>Quantity: {currentQuantity}</Text>
-      
-    </View>
-  );
-};
-
-const ShoppingCart = ({products, cartState}) =>{
-
-  //Calculate total price
-  let total = 0;
-  for(let i = 0; i < products.length; i++){
-    total += products[i].item.price;
-  }
-  const removeFromCart = (product) => {
-    //get the products array that do not contain the item we want to delete
-    cartState(products.filter((productToRemove) => productToRemove.item !== product),
-    );
+  function Totals() {
+    let [totalPrice, setTotalPrice] = useState(0);
+    let [totalItems, setTotalItems] = useState(0);
+    useEffect(() => {
+      setTotalPrice(getTotalPrice());
+      setTotalItems(getItemsCount());
+    });
+    return (
+      <View style={styles.row}>
+         <Text>Total </Text>
+         <Text> ${totalPrice} </Text>
+         <Text> Quantity {totalItems} </Text>
+      </View>
+   );
   };
 
+  const CartItem = ({ data }) => {
+    return(
+      <View style={styles.item}>
+        <Text style={styles.title}>{data.product.title}</Text>
+        <Image source={data.product.img} style={styles.cartImage}/>
+        <TouchableOpacity onPress={() => removeFromCart(data.product)}>
+            <Text>Remove</Text>
+        </TouchableOpacity>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => addQuantity(data)}>
+            <Text> + </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => subtractQuantity(data)}>
+            <Text> - </Text>
+          </TouchableOpacity>
+        </View>
+        <Text>Quantity: {data.quantity}</Text>
+        <Text>Price: {data.quantity * data.product.price}</Text>
+        
+      </View>
+    );
+  };
   const translateY = useSharedValue(0);
   //to get the old position
   const context = useSharedValue({y:0});
@@ -60,22 +57,22 @@ const ShoppingCart = ({products, cartState}) =>{
   }).onUpdate((event)=>{
     translateY.value = event.translationY + context.value.y;
       //clamp the view up
-    translateY.value = Math.max(translateY.value, -SCREEN_HEIGHT + 50 )
+    translateY.value = Math.max(translateY.value, -SCREEN_HEIGHT)
     //clamp the view down
-    translateY.value = Math.min(translateY.value, -SCREEN_HEIGHT/20 )
+    translateY.value = Math.min(translateY.value, -SCREEN_HEIGHT/8)
     //When done panning
   }).onEnd(()=>{
     if(translateY.value > -SCREEN_HEIGHT/2){
-      translateY.value = withTiming(-SCREEN_HEIGHT/20)
+      translateY.value = withTiming(-SCREEN_HEIGHT/8)
     }else if(translateY.value < -SCREEN_HEIGHT/2){
-      translateY.value = withTiming(-SCREEN_HEIGHT + 50);
+      translateY.value = withTiming(-SCREEN_HEIGHT);
     }
 
   });
 
   //start value of the view
   useEffect(()=>{
-    translateY.value = withTiming(-SCREEN_HEIGHT/20);
+    translateY.value = withTiming(-SCREEN_HEIGHT/8);
   },[]);
   //animation style
   const rBottomStyle = useAnimatedStyle(()=>{
@@ -88,52 +85,52 @@ const ShoppingCart = ({products, cartState}) =>{
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.bottomSheet, rBottomStyle]}>
         <View style={styles.line}/>
-        <View style={styles.row}>
+        <View style={[styles.row, {alignItems:'center'}, {justifyContent: "center"}]}>
           <Image source={shoppingcartIcon}/>
-          <Text>Total price: {total} </Text>
-          <Text>Total items: {products.length}</Text>
+          <Totals/>
         </View>
-        <View>
-          {products.map((item, index) => (
-            <RenderItem 
-            key={index}
-            data = {item} 
-            removeFromCart={removeFromCart}
-            />
-          ))}
-        </View>
-        
+        <FlatList
+          data={items}
+          renderItem={({ item }) => <CartItem data = {item}/>}>
+        </FlatList>
       </Animated.View>
     </GestureDetector>
   )
 };
-export default ShoppingCart;
+
 
 const styles = StyleSheet.create({
 
   bottomSheet:{
       height:SCREEN_HEIGHT,
       width:'100%',
-      backgroundColor: 'grey',
+      backgroundColor: '#f0f0f0',
       position:'absolute',
       top:SCREEN_HEIGHT,
-      borderRadius:25
+      borderRadius:25,
   },
   line:{
       width:75,
       height:4,
-      backgroundColor:'white',
+      backgroundColor:'grey',
       alignSelf:'center',
       marginVertical: 15,
       borderRadius:2
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#fcfcfc',
     padding: 50,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 15,
+    borderRadius:25
   },
   row:{
     flexDirection:'row',
+  },
+  cartImage:{
+    height: 100,
+    width:'50%',
+    borderRadius:5,
   }
 });
+export default ShoppingCart;
