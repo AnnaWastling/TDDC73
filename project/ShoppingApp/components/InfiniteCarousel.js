@@ -1,5 +1,12 @@
 import React, {useState, useContext} from 'react';
-import {View, Image, Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {CartContext} from './CartContext';
 import arrowL from '../assets/arrowleft.png';
 import arrowR from '../assets/arrowright.png';
@@ -12,14 +19,14 @@ const Card = ({data, cardWidth}) => {
   }
 
   return (
-    <View style={[styles.card, {width:cardWidth}]}>
+    <View style={[styles.card, {width: cardWidth}]}>
       <Image source={data.img} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
         <Text style={styles.description}>{data.description}</Text>
         <Text style={styles.price}>${data.price}</Text>
         <TouchableOpacity style={styles.button} onPress={() => onAddToCart()}>
-          <Text style={styles.buttontext}>Add to cart</Text>
+          <Text style={styles.buttontext}>Add</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -30,7 +37,7 @@ const InfiniteCarousel = ({products, numberItems, cardWidth}) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   let dots = [];
-  let pages = products.length / numberItems; // for the dots
+  let pages = Math.ceil(products.length / numberItems); // for the dots
   //if pageIndex is last page, set pageIndex = 0 otherwise add pageIndex
   const nextPage = () => {
     setPageIndex(pageIndex === pages - 1 ? 0 : pageIndex + 1);
@@ -50,24 +57,30 @@ const InfiniteCarousel = ({products, numberItems, cardWidth}) => {
 
   return (
     <View style={styles.container}>
-      
       <View style={styles.row}>
         <View>
-          <TouchableOpacity onPress={prevPage} >
-            <Image source={arrowL} style={styles.arrows}/>
+          <TouchableOpacity onPress={prevPage}>
+            <Image source={arrowL} style={styles.arrows} />
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {products.slice(pageIndex * numberItems, pageIndex * numberItems + numberItems).map((card, index) => ( 
+          {
             //returns a part of the array, slice(start, end)
-          <Card key={index} data={card} cardWidth={cardWidth}/>
-          ))}
-      </View>
+            products
+              .slice(
+                pageIndex * numberItems,
+                pageIndex * numberItems + numberItems,
+              )
+              .map((card, index) => (
+                <Card key={index} data={card} cardWidth={cardWidth} />
+              ))
+          }
+        </View>
         <View>
           <TouchableOpacity onPress={nextPage}>
-            <Image source={arrowR} style={styles.arrows}/>
+            <Image source={arrowR} style={styles.arrows} />
           </TouchableOpacity>
-        </View>   
+        </View>
       </View>
       <View style={styles.dotsContainer}>{dots}</View>
     </View>
@@ -94,12 +107,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     overflow: 'hidden',
     height: SCREEN_HEIGHT - 400,
-    //width: 95,
     borderRadius: 25,
-    margin:5,
-    marginBottom:100
+    margin: 5,
+    marginBottom: 100,
   },
-  cardsContainer:{
+  cardsContainer: {
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
@@ -122,7 +134,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent:'space-evenly',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   content: {
@@ -140,18 +152,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  arrows:{
+  arrows: {
     height: 40,
     width: 40,
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 20,
     elevation: 3,
     backgroundColor: 'grey',
+    position: 'absolute',
+    bottom: 0,
   },
   buttontext: {
     fontSize: 14,

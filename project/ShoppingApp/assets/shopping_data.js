@@ -41,5 +41,12 @@ const PRODUCTS = [
     description: 'fanciest',
     price: 3000,
   },
+  {
+    id: 7,
+    title: 'seven image',
+    img: require('./img6.jpg'),
+    description: 'fanciest',
+    price: 3000,
+  },
 ];
 export default PRODUCTS;

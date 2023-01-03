@@ -11,8 +11,12 @@ export default function App() {
     <CartProvider>
       <GestureHandlerRootView style={{flex: 1}}>
         <View style={styles.container}>
-          <InfiniteCarousel products={PRODUCTS} numberItems={3} cardWidth={100} />
-          <ShoppingCart backgroundColor={'#f0f0f0'} borderRadius={25}/>
+          <InfiniteCarousel
+            products={PRODUCTS}
+            numberItems={3}
+            cardWidth={100}
+          />
+          <ShoppingCart backgroundColor={'#f0f0f0'} borderRadius={25} />
         </View>
       </GestureHandlerRootView>
     </CartProvider>
