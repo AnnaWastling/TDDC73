@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, { createContext, useState } from 'react';
 import PRODUCTS from '../assets/shopping_data';
 export const CartContext = createContext();
 
@@ -35,11 +35,12 @@ export function CartProvider(props) {
       }
     });
   }
-
+  //total items in cart
   function getItemsCount() {
     return items.reduce((sum, item) => sum + item.quantity, 0);
   }
 
+  //total price for all products
   function getTotalPrice() {
     return items.reduce(
       (sum, item) => sum + item.totalPrice * item.quantity,
@@ -47,6 +48,7 @@ export function CartProvider(props) {
     );
   }
 
+  //new cart that dont contain the item to remove
   function removeFromCart(itemToRemove) {
     setItems(items.filter(itemToKeep => itemToKeep.product !== itemToRemove));
   }

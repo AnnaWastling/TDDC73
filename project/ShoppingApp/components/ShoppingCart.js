@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Dimensions,
@@ -6,19 +6,18 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import shoppingcartIcon from '../assets/cart_icon.png';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, FlatList } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {CartContext} from './CartContext';
-const {height: SCREEN_HEIGHT} = Dimensions.get('window');
+import { CartContext } from './CartContext';
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-const ShoppingCart = ({backgroundColor, borderRadius}) => {
+const ShoppingCart = ({ backgroundColor, borderRadius }) => {
   const {
     items,
     getItemsCount,
@@ -44,7 +43,7 @@ const ShoppingCart = ({backgroundColor, borderRadius}) => {
     );
   }
 
-  const CartItem = ({data}) => {
+  const CartItem = ({ data }) => {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{data.product.title}</Text>
@@ -53,12 +52,12 @@ const ShoppingCart = ({backgroundColor, borderRadius}) => {
           <TouchableOpacity
             style={styles.smallbuttons}
             onPress={() => addQuantity(data)}>
-            <Text style={{fontSize: 20}}> + </Text>
+            <Text style={{ fontSize: 20 }}> + </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.smallbuttons}
             onPress={() => subtractQuantity(data)}>
-            <Text style={{fontSize: 20}}> - </Text>
+            <Text style={{ fontSize: 20 }}> - </Text>
           </TouchableOpacity>
         </View>
         <Text>Quantity: {data.quantity}</Text>
@@ -71,15 +70,27 @@ const ShoppingCart = ({backgroundColor, borderRadius}) => {
       </View>
     );
   };
-  //useSharedValue = hook to create a reference to a valuevalue that can be shared and altered
+  //useSharedValue = hook to create a reference to a value that can be shared and altered
   const translateY = useSharedValue(0);
   //to get the old position
-  const context = useSharedValue({y: 0});
+  const context = useSharedValue({ y: 0 });
+
+  //start value of the view
+  useEffect(() => {
+    translateY.value = withTiming(-SCREEN_HEIGHT / 8);
+  }, []);
+
+  //animation style
+  const bottomStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    };
+  });
 
   //handling the moving
   const gesture = Gesture.Pan()
     .onStart(() => {
-      context.value = {y: translateY.value};
+      context.value = { y: translateY.value };
     })
     .onUpdate(event => {
       translateY.value = event.translationY + context.value.y;
@@ -97,39 +108,35 @@ const ShoppingCart = ({backgroundColor, borderRadius}) => {
       }
     });
 
-  //start value of the view
-  useEffect(() => {
-    translateY.value = withTiming(-SCREEN_HEIGHT / 8);
-  }, []);
-  //animation style
-  const rBottomStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{translateY: translateY.value}],
-    };
-  });
-
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View
         style={[
           styles.bottomSheet,
-          rBottomStyle,
-          {backgroundColor: backgroundColor},
-          {borderRadius: borderRadius},
+          bottomStyle,
+          { backgroundColor: backgroundColor },
+          { borderRadius: borderRadius },
         ]}>
         <View style={styles.line} />
         <View
           style={[
             styles.row,
-            {alignItems: 'center'},
-            {justifyContent: 'center'},
+            { alignItems: 'center' },
+            { justifyContent: 'center' },
           ]}>
           <Image source={shoppingcartIcon} />
           <Totals />
         </View>
         <FlatList
           data={items}
-          renderItem={({item}) => <CartItem data={item} />}></FlatList>
+          renderItem={({ item }) => <CartItem data={item} />}></FlatList>
+        <View>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={null}>
+          <Text style={styles.buttontext}>Checkout</Text>
+        </TouchableOpacity>
+        </View>
       </Animated.View>
     </GestureDetector>
   );
@@ -184,6 +191,17 @@ const styles = StyleSheet.create({
     elevation: 3,
     width: '10%',
     backgroundColor: '#ededed',
+  },
+  checkoutButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    borderRadius: 10,
+    elevation: 3,
+    width: '90%',
+    backgroundColor: 'grey',
+    alignSelf: 'center',
+    marginVertical: 8,
   },
   buttontext: {
     fontSize: 14,

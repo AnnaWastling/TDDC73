@@ -43,7 +43,7 @@ const PRODUCTS = [
   },
   {
     id: 7,
-    title: 'seven image',
+    title: 'seventh image',
     img: require('./img6.jpg'),
     description: 'fanciest',
     price: 3000,

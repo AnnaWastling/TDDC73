@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Image,
@@ -7,19 +7,19 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {CartContext} from './CartContext';
+import { CartContext } from './CartContext';
 import arrowL from '../assets/arrowleft.png';
 import arrowR from '../assets/arrowright.png';
-const {height: SCREEN_HEIGHT} = Dimensions.get('window');
-const Card = ({data, cardWidth}) => {
-  const {addItemToCart} = useContext(CartContext);
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const Card = ({ data, cardWidth }) => {
+  const { addItemToCart } = useContext(CartContext);
 
   function onAddToCart() {
     addItemToCart(data.id);
   }
 
   return (
-    <View style={[styles.card, {width: cardWidth}]}>
+    <View style={[styles.card, { width: cardWidth }]}>
       <Image source={data.img} resizeMode="contain" style={styles.image} />
       <View style={styles.content}>
         <Text style={styles.title}>{data.title}</Text>
@@ -33,7 +33,7 @@ const Card = ({data, cardWidth}) => {
   );
 };
 
-const InfiniteCarousel = ({products, numberItems, cardWidth}) => {
+const InfiniteCarousel = ({ products, numberItems, cardWidth }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   let dots = [];
@@ -51,8 +51,8 @@ const InfiniteCarousel = ({products, numberItems, cardWidth}) => {
     pageIndex === i
       ? dots.push(<View key={i} style={styles.dots} />)
       : dots.push(
-          <View key={i} style={[styles.dots, {backgroundColor: '#000'}]} />,
-        );
+        <View key={i} style={[styles.dots, { backgroundColor: '#000' }]} />,
+      );
   }
 
   return (
