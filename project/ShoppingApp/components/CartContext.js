@@ -58,7 +58,7 @@ export function CartProvider(props) {
     return item.quantity++;
   }
   function subtractQuantity(item) {
-    if (item.quantity > 0) {
+    if (item.quantity > 1) {
       console.log(item.quantity);
       return item.quantity--;
     }

@@ -10,10 +10,14 @@ import {
 import { CartContext } from './CartContext';
 import arrowL from '../assets/arrowleft.png';
 import arrowR from '../assets/arrowright.png';
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const Card = ({ data, cardWidth }) => {
-  const { addItemToCart } = useContext(CartContext);
 
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+//return a card with information for the item
+const Card = ({ data, cardWidth }) => {
+
+  const { addItemToCart } = useContext(CartContext);
+  //function from cartContext
   function onAddToCart() {
     addItemToCart(data.id);
   }
@@ -34,10 +38,12 @@ const Card = ({ data, cardWidth }) => {
 };
 
 const InfiniteCarousel = ({ products, numberItems, cardWidth }) => {
+  //Keep track of the current page
   const [pageIndex, setPageIndex] = useState(0);
 
   let dots = [];
-  let pages = Math.ceil(products.length / numberItems); // for the dots
+  //number of pages is total number of items / the choosen number of items for a page
+  let pages = Math.ceil(products.length / numberItems); 
   //if pageIndex is last page, set pageIndex = 0 otherwise add pageIndex
   const nextPage = () => {
     setPageIndex(pageIndex === pages - 1 ? 0 : pageIndex + 1);
@@ -46,7 +52,7 @@ const InfiniteCarousel = ({ products, numberItems, cardWidth }) => {
   const prevPage = () => {
     setPageIndex(pageIndex === 0 ? pages - 1 : pageIndex - 1);
   };
-  //connect dots with nr pages, different color for current page-dot
+  //connect dots with number of pages, different color for current page-dot
   for (let i = 0; i < pages; i++) {
     pageIndex === i
       ? dots.push(<View key={i} style={styles.dots} />)
@@ -65,7 +71,8 @@ const InfiniteCarousel = ({ products, numberItems, cardWidth }) => {
         </View>
         <View style={styles.cardsContainer}>
           {
-            //returns a part of the array, slice(start, end)
+            //returns a part of the array, slice(startIndex, endIndex)
+            //pageIndex = 0 => 0-3, pageIndex = 1 => 3-6
             products
               .slice(
                 pageIndex * numberItems,

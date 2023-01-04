@@ -30,15 +30,16 @@ const ShoppingCart = ({ backgroundColor, borderRadius }) => {
   function Totals() {
     let [totalPrice, setTotalPrice] = useState(0);
     let [totalItems, setTotalItems] = useState(0);
+    //runs at render and updates
     useEffect(() => {
       setTotalPrice(getTotalPrice());
       setTotalItems(getItemsCount());
     });
     return (
       <View style={styles.row}>
-        <Text>Total </Text>
-        <Text> ${totalPrice} </Text>
-        <Text> Quantity {totalItems} </Text>
+        <Text>Total: </Text>
+        <Text> ${totalPrice}, </Text>
+        <Text> Quantity: {totalItems} </Text>
       </View>
     );
   }
@@ -101,8 +102,11 @@ const ShoppingCart = ({ backgroundColor, borderRadius }) => {
       //When done panning
     })
     .onEnd(() => {
+      console.log(translateY.value)
+      //lower part of the screen
       if (translateY.value > -SCREEN_HEIGHT / 2) {
         translateY.value = withTiming(-SCREEN_HEIGHT / 8);
+        //lower part of the screen
       } else if (translateY.value < -SCREEN_HEIGHT / 2) {
         translateY.value = withTiming(-SCREEN_HEIGHT);
       }
